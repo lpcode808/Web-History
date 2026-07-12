@@ -108,6 +108,10 @@
   .question { font-family: var(--display); font-size: 1.28rem; font-weight: 700; line-height: 1.2; }
   .pain { color: var(--muted); }
   .dx-note { margin: .6rem 0 0; color: var(--muted); font-size: .74rem; line-height: 1.4; }
+  .anatomy { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem 1rem; margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--rule); }
+  .anatomy div { min-width: 0; }
+  .anatomy strong { display: block; font-size: .7rem; font-weight: 800; letter-spacing: .05em; color: var(--accent); }
+  .anatomy span { color: var(--muted); font-size: .8rem; line-height: 1.45; }
   .proof { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--rule); }
   .proof strong { display: block; margin-bottom: .2rem; }
   .winner { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
@@ -147,6 +151,7 @@
     .stop { font-size: .65rem; }
     .todo-form { grid-template-columns: 1fr; }
     .todo-form button { min-height: 44px; }
+    .anatomy { grid-template-columns: 1fr; gap: .65rem; }
     .thread-line { grid-template-columns: 86px 1fr; }
     .scope-row { grid-template-columns: 1fr; gap: .4rem; }
     .host-compare { grid-template-columns: 1fr; }
@@ -235,6 +240,12 @@
           <div class="label" id="note-label">Why this way?</div>
           <p class="question" id="why"></p>
           <p id="happening"></p>
+          <div class="anatomy" aria-label="The same Add, step by step">
+            <div><strong>Add is handled</strong><span id="fact-event"></span></div>
+            <div><strong>The item lives</strong><span id="fact-stored"></span></div>
+            <div><strong>The &lt;li&gt; comes from</strong><span id="fact-li"></span></div>
+            <div><strong>The user sees</strong><span id="fact-feel"></span></div>
+          </div>
           <p class="pain" id="pain"></p>
           <div class="proof"><strong>Apps that made the promise visible</strong><span id="apps"></span></div>
           <div class="winner"><span class="chip">Who won &amp; why</span><strong id="winner"></strong></div>
@@ -311,6 +322,14 @@
     <details>
       <summary id="build-log-title">Build signoff · a tiny history of this history</summary>
       <div class="build-entry">
+        <div><strong>2026-07-12</strong><br><span class="label">18:04 UTC · anatomy strip</span></div>
+        <div>
+          <p><strong>Lead: Claude · claude-fable-5.</strong> Made the guide’s core comparison explicit: every era now shows a four-part “same Add, step by step” strip—where the event is handled, where the item lives, who writes the <code>&lt;li&gt;</code>, and what the user sees—synced with the slider like the code and diagram. Also glossed the remaining bare jargon (CGI, server rendering as a named term, two-way binding, JSX) and added one sentence bridging 2016’s class components to the Hooks-style <code>useState</code> in the 2024 sample; retired the unexplained “shim” tide label.</p>
+          <ul><li><strong>No subagents.</strong> One editing and verification pass; the runtime exposed the exact model ID (claude-fable-5), so no ID was guessed.</li></ul>
+          <p>Verified with the same battery as the 11:50 UTC entry, extended to assert the new fact strip stays filled and synchronized across all six eras: Node syntax check, privacy grep sweep, <code>git diff --check</code>, and a headless-Chromium pass over light/dark at 1280px/340px/320px with zero console errors, zero network requests, no horizontal overflow, working reduced motion, the full to-do flow, and slider keys.</p>
+        </div>
+      </div>
+      <div class="build-entry">
         <div><strong>2026-07-12</strong><br><span class="label">11:50 UTC · glossary polish</span></div>
         <div>
           <p><strong>Lead: Claude · claude-sonnet-5.</strong> Overnight polish pass over the existing v0: gave first-appearance plain-English glosses to terms the page already used but never defined—DOM, native ES modules, data binding, component, state, build step, abstraction, and DX—tied each to the shared “Add a to-do” example, and sharpened the task-runner-vs-bundler contrast in the Build thread. No architecture, layout, or era lineup changed.</p>
@@ -361,21 +380,33 @@
       apps: 'Yahoo and GeoCities made the web feel enormous by connecting and hosting millions of ordinary documents. They accelerated the browser win even though their pages were not yet rich client apps.',
       flowCaption: 'Mostly a document delivery path; persistence needs a person or a separate server script.',
       flow: [['Browser', 'shows the form'], ['HTTP request', 'loads another document'], ['Static file', 'already-written HTML'], ['Person', 'edits the list']],
+      facts: {
+        event: 'Nowhere. No code runs; the form can only load another page.',
+        stored: 'Inside the HTML file itself, on the server’s disk.',
+        li: 'A person, editing the file and uploading it again.',
+        feel: 'A manual update—new items appear when the owner ships a new file.'
+      },
       winner: 'Netscape Navigator · distribution'
     },
     {
       year: '2002', name: 'Server-rendered PHP / CGI', tide: 30, tideLabel: 'logic moves to the server',
       code: `<?php\n$todo = trim($_POST['todo'] ?? '');\nif ($todo !== '') {\n  file_put_contents(\n    'todos.txt', $todo . "\\n", FILE_APPEND\n  );\n}\nheader('Location: /'); // reload the page\n?>`,
       why: 'Why put the work on a server?',
-      happening: 'A form sends the new text to PHP or a CGI program. The server saves it, builds fresh HTML, and sends a whole new page back. One central machine can keep everybody’s data; the browser stays simple.',
+      happening: 'A form sends the new text to PHP or a CGI program (CGI: the early standard for handing a web request to a script). This is server rendering: code on the server combines a template with saved data to produce the HTML for each request. The server saves the item, rebuilds the page, and sends the whole thing back—one central machine keeps everybody’s data while the browser stays simple.',
       pain: 'Pain that pushed change: each tiny action flashes through a full reload, and server templates mix HTML with application logic. IE, bundled with Windows, reached roughly 95% or more share by 2002—great distribution, but its dominance slowed pressure for shared standards.',
       apps: 'Wikipedia switched its growing encyclopedia to a PHP-based engine in January 2002. The page could now be assembled from saved articles on every request.',
       flowCaption: 'The server owns the action, the data, and the next HTML page.',
       flow: [['Browser', 'submits the form'], ['PHP / CGI', 'handles Add'], ['Storage', 'saves the item'], ['Server template', 'builds new HTML'], ['Browser', 'reloads the page']],
+      facts: {
+        event: 'On the server, when the submitted form arrives.',
+        stored: 'In a file or database on the server.',
+        li: 'The server template, rebuilding the whole page.',
+        feel: 'A full page reload for every Add.'
+      },
       winner: 'Internet Explorer · distribution'
     },
     {
-      year: '2006', name: 'jQuery + AJAX', tide: 46, tideLabel: 'a useful browser shim',
+      year: '2006', name: 'jQuery + AJAX', tide: 46, tideLabel: 'a thin compatibility layer',
       code: `$('#todo-form').on('submit', function (event) {\n  event.preventDefault();\n\n  $.post('/todos', {\n    todo: $('#todo-input').val()\n  }, function (item) {\n    $('#todo-list').append(\n      $('<li>').text(item.text)\n    );\n  });\n});`,
       why: 'Why add a library for a button click?',
       happening: 'AJAX means asking the server for data in the background, then updating just part of the page instead of reloading it. jQuery, released in 2006, gives one short API for finding and changing elements in the DOM—the Document Object Model, the browser’s live, scriptable copy of the page it is showing—for handling events, and for making that background request despite browser differences. The server still owns the data; JavaScript reaches into the DOM and updates only the changed list.',
@@ -383,6 +414,12 @@
       apps: 'Gmail and Google Maps made no-reload interactions feel inevitable. They demonstrated AJAX rather than jQuery itself; Google Code’s public use of jQuery in 2007 showed the compatibility helper spreading into major sites.',
       flowCaption: 'The server still owns data; JavaScript patches only the changed part of the page.',
       flow: [['Browser + jQuery', 'catches submit'], ['AJAX request', 'sends in background'], ['Server API', 'saves and replies'], ['DOM patch', 'appends one <li>']],
+      facts: {
+        event: 'In the browser, by jQuery’s submit handler.',
+        stored: 'Still on the server, saved through the background AJAX request.',
+        li: 'Hand-written jQuery code, appending one element to the DOM.',
+        feel: 'A background update—the list grows with no reload.'
+      },
       winner: 'jQuery · distribution'
     },
     {
@@ -390,32 +427,50 @@
       code: `// AngularJS controller\n$scope.todos = [];\n\n$scope.addTodo = function () {\n  $http.post('/todos', {\n    text: $scope.newTodo\n  }).then(function (response) {\n    $scope.todos.push(response.data);\n    $scope.newTodo = '';\n  });\n};`,
       why: 'Why build a whole app in the browser?',
       happening: 'A single-page application (SPA) loads one application shell, then JavaScript swaps what’s visible instead of requesting a new page. AngularJS (around 2010) leans on data binding: framework machinery that automatically keeps JavaScript data and the displayed HTML in sync, so pushing a new item into $scope.todos alone updates the list on screen. Backbone instead supplies lighter structure, without built-in binding. Either way, the client now generates much of the interface itself.',
-      pain: 'Pain that pushed change: invisible two-way binding could make it hard to trace which change triggered which update, and large SPAs shipped a lot of JavaScript before anything appeared. Angular 2’s incompatible 2016 rewrite also broke trust: teams learned that a framework’s upgrade path is part of its real cost.',
+      pain: 'Pain that pushed change: invisible two-way binding—where edits flow from data to screen and from the screen back into the data—could make it hard to trace which change triggered which update, and large SPAs shipped a lot of JavaScript before anything appeared. Angular 2’s incompatible 2016 rewrite also broke trust: teams learned that a framework’s upgrade path is part of its real cost.',
       apps: 'Trello was built from the ground up with Backbone models, views, and routes. Its real-time boards showed why a browser needed application structure, not just scattered click handlers.',
       flowCaption: 'The browser holds an application model and turns changing data into changing views.',
       flow: [['App shell', 'loads once'], ['Controller', 'handles Add'], ['Client model', 'updates todos'], ['Data binding', 'updates the view'], ['API', 'persists remotely']],
+      facts: {
+        event: 'In the browser, by the framework’s controller.',
+        stored: 'In the client-side model ($scope.todos), synced to a server API.',
+        li: 'Data binding—the framework redraws the view from the model.',
+        feel: 'An instant in-app change; no page reload.'
+      },
       winner: 'AngularJS · performance + DX'
     },
     {
       year: '2016', name: 'React + webpack', tide: 90, tideLabel: 'maximum toolchain',
       code: `class TodoApp extends React.Component {\n  state = { text: '', todos: [] };\n\n  addTodo = event => {\n    event.preventDefault();\n    this.setState(({ todos, text }) => ({\n      todos: [...todos, { text, done: false }],\n      text: ''\n    }));\n  };\n\n  render() {\n    return <form onSubmit={this.addTodo}>…</form>;\n  }\n}`,
       why: 'Why rebuild the interface from state?',
-      happening: 'React, released in 2013, treats the screen as a result of state: the current data that determines what the interface shows—here, the to-do array. Change the array and call setState; React works out how to update the DOM itself. React also organizes an interface into components: reusable pieces of interface bundled with their own behavior, which helped teams split large screens into manageable, reusable parts instead of one tangled page. Before any of that reaches a browser, webpack—born around 2012—runs a build step: work done ahead of time that bundles JSX, modules, CSS, and assets into files a browser can run.',
+      happening: 'React, released in 2013, treats the screen as a result of state: the current data that determines what the interface shows—here, the to-do array. Change the array and call setState; React works out how to update the DOM itself. React also organizes an interface into components: reusable pieces of interface bundled with their own behavior, which helped teams split large screens into manageable, reusable parts instead of one tangled page. Before any of that reaches a browser, webpack—born around 2012—runs a build step: work done ahead of time that turns JSX (the HTML-like tags written inside JavaScript, visible in the code sample), modules, CSS, and assets into files a browser can run.',
       pain: 'Pain that pushed change: installing, configuring, and waiting for the build system became a job of its own. React made view logic predictable, but the surrounding webpack/Babel toolchain could be slow and bewildering for one small form.',
       apps: 'Facebook proved React inside a huge changing interface; Khan Academy was an early high-profile external deployment. Real products made “the screen is a function of state” more than a conference idea.',
       flowCaption: 'A build prepares the app; at runtime, state becomes interface.',
       flow: [['webpack build', 'packages modules + JSX'], ['Browser event', 'calls addTodo'], ['React state', 'creates new array'], ['React render', 'calculates the change'], ['DOM', 'updates the list']],
+      facts: {
+        event: 'In the browser, by the component’s addTodo method.',
+        stored: 'In component state—the todos array.',
+        li: 'React, recalculating the interface from the new state.',
+        feel: 'An instant state change; the DOM follows automatically.'
+      },
       winner: 'React + webpack · performance + DX'
     },
     {
       year: '2024', name: 'React + Vite + TypeScript', tide: 64, tideLabel: 'the platform catches up',
       code: `type Todo = { text: string; done: boolean };\nconst [todos, setTodos] = useState<Todo[]>([]);\nconst [text, setText] = useState('');\n\nfunction addTodo(e: FormEvent) {\n  e.preventDefault();\n  if (!text.trim()) return;\n  setTodos(items => [\n    ...items, { text: text.trim(), done: false }\n  ]);\n  setText('');\n}`,
       why: 'Why keep React but replace so much around it?',
-      happening: 'TypeScript adds type checking: describing the expected shape of data—like a Todo with a text string and a done boolean—and catching mismatches before the code ever runs, then compiling down to ordinary JavaScript for the browser. Vite, released in 2020, leans on native ES modules—the browser’s own built-in understanding of JavaScript’s import/export syntax—to serve source files directly during development instead of bundling everything up front; it still builds an optimized bundle for release.',
+      happening: 'TypeScript adds type checking: describing the expected shape of data—like a Todo with a text string and a done boolean—and catching mismatches before the code ever runs, then compiling down to ordinary JavaScript for the browser. Vite, released in 2020, leans on native ES modules—the browser’s own built-in understanding of JavaScript’s import/export syntax—to serve source files directly during development instead of bundling everything up front; it still builds an optimized bundle for release. React itself moved too: the newer Hooks style—the useState calls in the sample—replaced 2016’s class components.',
       pain: 'What still hurts: this tiny to-do can be built with plain HTML, CSS, and JavaScript—just like the page you are using. Frameworks still pay off at scale, but “modern” increasingly means choosing the least machinery that fits.',
       apps: 'StackBlitz made Vite-powered projects run directly in a browser, turning “instant start” into something people could feel. Vite then spread through app frameworks including SvelteKit, Astro, and React Router.',
       flowCaption: 'Types check the source; Vite leans on browser modules; React still maps state to UI.',
       flow: [['TypeScript source', 'describes Todo shape'], ['Type check', 'catches mismatches'], ['Vite dev server', 'serves modules on demand'], ['React state', 'adds the item'], ['DOM', 'updates the list']],
+      facts: {
+        event: 'In the browser, in a typed addTodo function.',
+        stored: 'In React state, its shape checked by TypeScript before the code ran.',
+        li: 'Still React—state in, interface out.',
+        feel: 'The same instant update, reached with far less tooling wait.'
+      },
       winner: 'TypeScript + Vite · correctness + DX'
     }
   ];
@@ -427,6 +482,8 @@
     code: document.querySelector('#code-sample'), why: document.querySelector('#why'),
     happening: document.querySelector('#happening'), pain: document.querySelector('#pain'),
     winner: document.querySelector('#winner'), apps: document.querySelector('#apps'),
+    factEvent: document.querySelector('#fact-event'), factStored: document.querySelector('#fact-stored'),
+    factLi: document.querySelector('#fact-li'), factFeel: document.querySelector('#fact-feel'),
     flow: document.querySelector('#logic-flow'), flowCaption: document.querySelector('#logic-caption'),
     tide: document.querySelector('#tide-fill'), tideLabel: document.querySelector('#tide-label'), tideMeter: document.querySelector('#tide-meter')
   };
@@ -441,6 +498,10 @@
     fields.pain.textContent = era.pain;
     fields.apps.textContent = era.apps;
     fields.winner.textContent = era.winner;
+    fields.factEvent.textContent = era.facts.event;
+    fields.factStored.textContent = era.facts.stored;
+    fields.factLi.textContent = era.facts.li;
+    fields.factFeel.textContent = era.facts.feel;
     fields.flowCaption.textContent = era.flowCaption;
     fields.flow.replaceChildren();
     era.flow.forEach((step, stepIndex) => {
