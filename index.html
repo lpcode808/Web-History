@@ -90,6 +90,14 @@
   .tide-track { height: 8px; margin: .7rem 0 .45rem; background: var(--soft); overflow: hidden; }
   .tide-fill { width: 10%; height: 100%; background: var(--accent); transition: width 220ms ease-out; }
   .tide p { margin: 0; font-size: .78rem; line-height: 1.35; }
+  .logic-map { margin: 0 0 1.25rem; padding: 1rem 1.25rem; border: 1px solid var(--rule); background: var(--surface); }
+  .logic-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; margin-bottom: .8rem; }
+  .logic-head p { margin: 0; color: var(--muted); font-size: .78rem; }
+  .flow { display: flex; align-items: stretch; gap: .5rem; overflow-x: auto; padding: .2rem .1rem .5rem; scrollbar-width: thin; }
+  .flow-node { display: grid; align-content: center; flex: 1 0 9rem; min-height: 4.4rem; padding: .65rem .75rem; border: 1px solid var(--ink); }
+  .flow-node strong { font-size: .82rem; line-height: 1.2; }
+  .flow-node span { color: var(--muted); font-size: .72rem; line-height: 1.3; }
+  .flow-arrow { flex: 0 0 auto; align-self: center; color: var(--accent); font-weight: 900; }
   .panels { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); border: 1px solid var(--ink); background: var(--surface); box-shadow: var(--shadow); }
   .code-panel { min-width: 0; padding: clamp(1rem, 2.5vw, 1.5rem); background: var(--code); color: var(--code-ink); }
   .code-panel .label { color: #d9a441; }
@@ -99,6 +107,8 @@
   .note-panel p { margin: .7rem 0; }
   .question { font-family: var(--display); font-size: 1.28rem; font-weight: 700; line-height: 1.2; }
   .pain { color: var(--muted); }
+  .proof { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--rule); }
+  .proof strong { display: block; margin-bottom: .2rem; }
   .winner { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
   .chip { display: inline-block; padding: .28rem .5rem; color: var(--accent-ink); background: var(--accent); }
   .threads { padding: clamp(3rem, 8vw, 7rem) 0; }
@@ -176,7 +186,7 @@
     <div class="shell">
       <div class="section-head">
         <div><div class="label">Drag the years</div><h2 id="eras-title">Same click, different machinery</h2></div>
-        <p>Use the slider, arrow keys, Page Up/Down, Home, or End. All three panels change together.</p>
+        <p>Use the slider, arrow keys, Page Up/Down, Home, or End. The diagram and lesson change together.</p>
       </div>
       <div class="timeline">
         <label class="sr-only" for="era-slider">Choose a web-development era</label>
@@ -196,6 +206,11 @@
         </div>
       </div>
 
+      <section class="logic-map" aria-labelledby="logic-title">
+        <div class="logic-head"><strong id="logic-title">Where “Add” travels</strong><p id="logic-caption">The page is the whole system.</p></div>
+        <div class="flow" id="logic-flow"></div>
+      </section>
+
       <div class="panels">
         <section class="code-panel" aria-labelledby="code-label">
           <div class="label" id="code-label">The “Add” action</div>
@@ -206,6 +221,7 @@
           <p class="question" id="why"></p>
           <p id="happening"></p>
           <p class="pain" id="pain"></p>
+          <div class="proof"><strong>Apps that made the promise visible</strong><span id="apps"></span></div>
           <div class="winner"><span class="chip">Who won &amp; why</span><strong id="winner"></strong></div>
         </section>
       </div>
@@ -230,6 +246,15 @@
     <details>
       <summary id="build-log-title">Build signoff · a tiny history of this history</summary>
       <div class="build-entry">
+        <div><strong>2026-07-12</strong><br><span class="label">00:11 HST · app + logic pass</span></div>
+        <div>
+          <p><strong>Lead: Codex · gpt-5.6-sol.</strong> Added historically grounded product examples and a synchronized request-path diagram for every era; verified JavaScript syntax, desktop/mobile rendering, privacy constraints, and the final diff. Full pointer/keyboard automation remains for the overnight browser pass.</p>
+          <ul>
+            <li><strong>No subagents.</strong> This was a tightly integrated content, interaction, and visual change; no separate model seats were used.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="build-entry">
         <div><strong>2026-07-11</strong><br><span class="label">23:54 HST · v0</span></div>
         <div>
           <p><strong>Lead: Codex · gpt-5.6-sol.</strong> Directed the visual system, integrated the page, corrected historical details, ran privacy checks, and verified desktop/mobile renders.</p>
@@ -253,6 +278,9 @@
       why: 'Why would anyone do it this way?',
       happening: 'The browser asks for a finished HTML document. The “app” is really a page: adding an item means sending a form or asking the site owner to edit the file and upload it again. HTML is generated ahead of time, not in the browser.',
       pain: 'Pain that pushed change: every update required a new page load or a person changing files. As browser competition grew—Netscape held about 80% of the market in 1995—pages also had to survive inconsistent browser features.',
+      apps: 'Yahoo and GeoCities made the web feel enormous by connecting and hosting millions of ordinary documents. They accelerated the browser win even though their pages were not yet rich client apps.',
+      flowCaption: 'Mostly a document delivery path; persistence needs a person or a separate server script.',
+      flow: [['Browser', 'shows the form'], ['HTTP request', 'loads another document'], ['Static file', 'already-written HTML'], ['Person', 'edits the list']],
       winner: 'Netscape Navigator · distribution'
     },
     {
@@ -261,6 +289,9 @@
       why: 'Why put the work on a server?',
       happening: 'A form sends the new text to PHP or a CGI program. The server saves it, builds fresh HTML, and sends a whole new page back. One central machine can keep everybody’s data; the browser stays simple.',
       pain: 'Pain that pushed change: each tiny action flashes through a full reload, and server templates mix HTML with application logic. IE, bundled with Windows, reached roughly 95% or more share by 2002—great distribution, but its dominance slowed pressure for shared standards.',
+      apps: 'Wikipedia switched its growing encyclopedia to a PHP-based engine in January 2002. The page could now be assembled from saved articles on every request.',
+      flowCaption: 'The server owns the action, the data, and the next HTML page.',
+      flow: [['Browser', 'submits the form'], ['PHP / CGI', 'handles Add'], ['Storage', 'saves the item'], ['Server template', 'builds new HTML'], ['Browser', 'reloads the page']],
       winner: 'Internet Explorer · distribution'
     },
     {
@@ -269,6 +300,9 @@
       why: 'Why add a library for a button click?',
       happening: 'AJAX means “ask the server in the background.” jQuery, released in 2006, gives one short API for finding elements, handling events, and making that request despite browser differences. The server still owns data; JavaScript updates only the changed list.',
       pain: 'Pain that pushed change: as pages became app-like, scattered callbacks and manual DOM edits became hard to reason about. Build tools later tried to tame the growing pile—Grunt in 2012 and Gulp in 2013 automated repetitive CSS and JavaScript jobs.',
+      apps: 'Gmail and Google Maps made no-reload interactions feel inevitable. They demonstrated AJAX rather than jQuery itself; Google Code’s public use of jQuery in 2007 showed the compatibility helper spreading into major sites.',
+      flowCaption: 'The server still owns data; JavaScript patches only the changed part of the page.',
+      flow: [['Browser + jQuery', 'catches submit'], ['AJAX request', 'sends in background'], ['Server API', 'saves and replies'], ['DOM patch', 'appends one <li>']],
       winner: 'jQuery · distribution'
     },
     {
@@ -277,6 +311,9 @@
       why: 'Why build a whole app in the browser?',
       happening: 'A single-page app (SPA) loads one shell, then JavaScript swaps views without full reloads. AngularJS (around 2010) binds data to HTML; Backbone supplies lighter structure. The client now generates much of the interface.',
       pain: 'Pain that pushed change: two-way binding and framework-specific rules could hide when and why state changed. Large SPAs shipped lots of JavaScript. Angular 2’s incompatible 2016 rewrite also broke trust: teams learned that a framework’s upgrade path is part of its cost.',
+      apps: 'Trello was built from the ground up with Backbone models, views, and routes. Its real-time boards showed why a browser needed application structure, not just scattered click handlers.',
+      flowCaption: 'The browser holds an application model and turns changing data into changing views.',
+      flow: [['App shell', 'loads once'], ['Controller', 'handles Add'], ['Client model', 'updates todos'], ['Data binding', 'updates the view'], ['API', 'persists remotely']],
       winner: 'AngularJS · performance + DX'
     },
     {
@@ -285,6 +322,9 @@
       why: 'Why rebuild the interface from state?',
       happening: 'React, released in 2013, treats the screen as a result of data called state. Change the array; React updates the DOM. Components make large interfaces easier to split and reuse. webpack—born around 2012—bundles JSX, modules, CSS, and assets for browsers.',
       pain: 'Pain that pushed change: installing, configuring, and waiting for the build system became a job of its own. React made view logic predictable, but the surrounding webpack/Babel ecosystem could be slow and bewildering for one small form.',
+      apps: 'Facebook proved React inside a huge changing interface; Khan Academy was an early high-profile external deployment. Real products made “the screen is a function of state” more than a conference idea.',
+      flowCaption: 'A build prepares the app; at runtime, state becomes interface.',
+      flow: [['webpack build', 'packages modules + JSX'], ['Browser event', 'calls addTodo'], ['React state', 'creates new array'], ['React render', 'calculates the change'], ['DOM', 'updates the list']],
       winner: 'React + webpack · performance + DX'
     },
     {
@@ -293,6 +333,9 @@
       why: 'Why keep React but replace so much around it?',
       happening: 'TypeScript catches many shape mistakes before the browser runs the code. Vite, released in 2020, serves source modules quickly during development and builds an optimized site for release. Native ES modules let the browser share more of the work.',
       pain: 'What still hurts: this tiny to-do can be built with plain HTML, CSS, and JavaScript—just like the page you are using. Frameworks still pay off at scale, but “modern” increasingly means choosing the least machinery that fits.',
+      apps: 'StackBlitz made Vite-powered projects run directly in a browser, turning “instant start” into something people could feel. Vite then spread through app frameworks including SvelteKit, Astro, and React Router.',
+      flowCaption: 'Types check the source; Vite leans on browser modules; React still maps state to UI.',
+      flow: [['TypeScript source', 'describes Todo shape'], ['Type check', 'catches mismatches'], ['Vite dev server', 'serves modules on demand'], ['React state', 'adds the item'], ['DOM', 'updates the list']],
       winner: 'TypeScript + Vite · correctness + DX'
     }
   ];
@@ -303,8 +346,9 @@
     year: document.querySelector('#era-year'), name: document.querySelector('#era-name'),
     code: document.querySelector('#code-sample'), why: document.querySelector('#why'),
     happening: document.querySelector('#happening'), pain: document.querySelector('#pain'),
-    winner: document.querySelector('#winner'), tide: document.querySelector('#tide-fill'),
-    tideLabel: document.querySelector('#tide-label'), tideMeter: document.querySelector('#tide-meter')
+    winner: document.querySelector('#winner'), apps: document.querySelector('#apps'),
+    flow: document.querySelector('#logic-flow'), flowCaption: document.querySelector('#logic-caption'),
+    tide: document.querySelector('#tide-fill'), tideLabel: document.querySelector('#tide-label'), tideMeter: document.querySelector('#tide-meter')
   };
 
   function showEra(index) {
@@ -315,7 +359,22 @@
     fields.why.textContent = era.why;
     fields.happening.textContent = era.happening;
     fields.pain.textContent = era.pain;
+    fields.apps.textContent = era.apps;
     fields.winner.textContent = era.winner;
+    fields.flowCaption.textContent = era.flowCaption;
+    fields.flow.replaceChildren();
+    era.flow.forEach((step, stepIndex) => {
+      const node = document.createElement('div');
+      node.className = 'flow-node';
+      const title = document.createElement('strong');
+      const detail = document.createElement('span');
+      title.textContent = step[0]; detail.textContent = step[1];
+      node.append(title, detail); fields.flow.append(node);
+      if (stepIndex < era.flow.length - 1) {
+        const arrow = document.createElement('span');
+        arrow.className = 'flow-arrow'; arrow.setAttribute('aria-hidden', 'true'); arrow.textContent = '→'; fields.flow.append(arrow);
+      }
+    });
     fields.tide.style.width = `${era.tide}%`;
     fields.tideLabel.textContent = era.tideLabel;
     fields.tideMeter.setAttribute('aria-valuenow', era.tide);
