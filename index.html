@@ -115,6 +115,18 @@
   .thread-line { display: grid; grid-template-columns: 120px 1fr; gap: 1rem; padding: 1rem 0; border-top: 1px solid var(--rule); }
   .thread-line:last-child { border-bottom: 1px solid var(--rule); }
   .thread-line p { margin: 0; color: var(--muted); }
+  .beyond { padding: clamp(3rem, 8vw, 7rem) 0; border-top: 1px solid var(--rule); }
+  .scope-map { margin-top: 2.25rem; border-top: 2px solid var(--ink); }
+  .scope-row { display: grid; grid-template-columns: minmax(8rem, .55fr) minmax(0, 1.45fr) minmax(11rem, .8fr); gap: clamp(1rem, 3vw, 2.5rem); padding: 1.2rem 0; border-bottom: 1px solid var(--rule); }
+  .scope-row h3 { margin: 0; font-family: var(--body); font-size: .82rem; letter-spacing: .07em; text-transform: uppercase; }
+  .scope-row p { margin: 0; color: var(--muted); }
+  .scope-question { color: var(--ink) !important; font-family: var(--display); font-size: 1.05rem; font-weight: 700; line-height: 1.35; }
+  .host-compare { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; margin-top: 1rem; }
+  .host-choice { padding-top: .65rem; border-top: 3px solid var(--soft); }
+  .host-choice:first-child { border-color: var(--accent); }
+  .host-choice strong { display: block; font-size: .82rem; }
+  .host-choice span { display: block; color: var(--muted); font-size: .74rem; line-height: 1.4; }
+  .scope-foot { max-width: 66ch; margin: 1.4rem 0 0 auto; color: var(--muted); font-size: .88rem; }
   .coda { max-width: 780px; margin: 0 0 clamp(3rem, 8vw, 7rem) auto; padding: clamp(1.5rem, 5vw, 3rem); color: var(--accent-ink); background: var(--accent); }
   .coda h2 { margin: 0 0 .7rem; font-family: var(--display); font-size: clamp(2rem, 5vw, 4rem); line-height: .95; letter-spacing: -.035em; }
   .coda p { margin: .7rem 0 0; max-width: 62ch; }
@@ -135,6 +147,8 @@
     .todo-form { grid-template-columns: 1fr; }
     .todo-form button { min-height: 44px; }
     .thread-line { grid-template-columns: 86px 1fr; }
+    .scope-row { grid-template-columns: 1fr; gap: .4rem; }
+    .host-compare { grid-template-columns: 1fr; }
     .build-entry { grid-template-columns: 1fr; gap: .35rem; }
     .panels { box-shadow: 3px 3px 0 var(--ink); }
   }
@@ -237,6 +251,55 @@
     <div class="thread-line"><strong>CSS aside</strong><p>Hand-written CSS grew Sass variables and nesting, then utility systems such as Tailwind traded named styles for small classes composed in HTML. Native CSS later absorbed variables, nesting, and more.</p></div>
   </section>
 
+  <section class="beyond" aria-labelledby="beyond-title">
+    <div class="shell">
+      <div class="section-head">
+        <div><div class="label">The rest of the iceberg</div><h2 id="beyond-title">This page followed one thread</h2></div>
+        <p>We tracked how browser code built one interface. A production web app is also a delivery network, a data system, a security boundary, and an operating practice. Each row below could be its own “through the years” guide.</p>
+      </div>
+      <div class="scope-map">
+        <article class="scope-row">
+          <h3>Hosting + edge</h3>
+          <div>
+            <p>Deployment turns files into a public service. A CDN—content delivery network—keeps copies near visitors; edge functions can run small pieces of server code near them too.</p>
+            <div class="host-compare" aria-label="Three modern hosting emphases">
+              <div class="host-choice"><strong>Vercel</strong><span>Framework-aware deployments, preview URLs, and globally distributed delivery.</span></div>
+              <div class="host-choice"><strong>Netlify</strong><span>Git-centered deploy workflows, atomic releases, previews, functions, and edge functions.</span></div>
+              <div class="host-choice"><strong>Cloudflare</strong><span>CDN, DNS, security, Pages, Workers, and data services on one global network.</span></div>
+            </div>
+          </div>
+          <p class="scope-question">Next guide: Vercel vs Netlify vs Cloudflare—where does the app actually run?</p>
+        </article>
+        <article class="scope-row">
+          <h3>Servers + APIs</h3>
+          <p>A server validates requests, applies business rules, talks to private systems, and returns HTML or data. It might be one long-running program, a container, a serverless function, or code distributed across the edge.</p>
+          <p class="scope-question">What changed from one server in a rack to functions started per request?</p>
+        </article>
+        <article class="scope-row">
+          <h3>Data + storage</h3>
+          <p>Our specimen forgets on reload. Real apps choose databases for structured records, object storage for files, caches for speed, queues for work that can finish later, and backups for the day something breaks.</p>
+          <p class="scope-question">Where does the to-do live, and what happens when two people edit it?</p>
+        </article>
+        <article class="scope-row">
+          <h3>Identity + security</h3>
+          <p>Authentication asks who you are; authorization asks what you may do. Around them sit HTTPS/TLS encryption, secrets, input validation, security headers, dependency review, firewalls, rate limits, and protection from abusive traffic.</p>
+          <p class="scope-question">A login box is the visible inch of a much larger trust system.</p>
+        </article>
+        <article class="scope-row">
+          <h3>DNS + requests</h3>
+          <p>Before any HTML arrives, DNS turns a domain name into a destination. HTTP carries the request; TLS protects it; load balancers, proxies, caches, and CDNs decide which machine—or nearby copy—answers.</p>
+          <p class="scope-question">What happens between pressing Enter on a URL and seeing the first pixel?</p>
+        </article>
+        <article class="scope-row">
+          <h3>Quality + operations</h3>
+          <p>Tests catch regressions; accessibility work keeps the interface usable; continuous integration checks each change; observability combines logs, metrics, traces, and error reports so a team can understand failures after release.</p>
+          <p class="scope-question">Shipping is an event. Operating the app is the ongoing job.</p>
+        </article>
+      </div>
+      <p class="scope-foot">These systems overlap. Modern platforms bundle several together, which is convenient until their defaults, limits, geography, pricing, or lock-in no longer match the app. The same tide appears again: assemble many primitives yourself, then adopt a platform, then split pieces apart when control matters.</p>
+    </div>
+  </section>
+
   <section class="shell coda" aria-labelledby="coda-title">
     <h2 id="coda-title">And now: AI-assisted loops</h2>
     <p>AI can draft code, explain unfamiliar files, and shorten the edit–run–check loop. It is another layer, not a repeal of web history: someone still chooses the architecture, checks the browser, tests accessibility, and owns the mistakes. Expect the same tide—more abstraction now, then leaner tools as the useful parts settle into everyday practice.</p>
@@ -245,6 +308,13 @@
   <section class="shell build-log" aria-labelledby="build-log-title">
     <details>
       <summary id="build-log-title">Build signoff · a tiny history of this history</summary>
+      <div class="build-entry">
+        <div><strong>2026-07-12</strong><br><span class="label">00:22 HST · systems map</span></div>
+        <div>
+          <p><strong>Lead: Codex · gpt-5.6-sol.</strong> Added a bottom-of-page scope map for hosting/CDNs, servers/APIs, data, identity/security, DNS/request routing, and operations, including a current Vercel/Netlify/Cloudflare orientation; verified primary vendor documentation, syntax, responsive rendering, privacy, and the final diff.</p>
+          <ul><li><strong>No subagents.</strong> The content architecture, terminology, and visual integration formed one tightly coupled pass.</li></ul>
+        </div>
+      </div>
       <div class="build-entry">
         <div><strong>2026-07-12</strong><br><span class="label">00:11 HST · app + logic pass</span></div>
         <div>
