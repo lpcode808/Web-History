@@ -107,6 +107,7 @@
   .note-panel p { margin: .7rem 0; }
   .question { font-family: var(--display); font-size: 1.28rem; font-weight: 700; line-height: 1.2; }
   .pain { color: var(--muted); }
+  .dx-note { margin: .6rem 0 0; color: var(--muted); font-size: .74rem; line-height: 1.4; }
   .proof { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--rule); }
   .proof strong { display: block; margin-bottom: .2rem; }
   .winner { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
@@ -216,7 +217,7 @@
         <div class="tide" id="tide-meter" role="progressbar" aria-label="The tide of abstraction" aria-valuemin="0" aria-valuemax="100" aria-valuenow="10" aria-valuetext="10 percent, close to the metal">
           <div class="tide-top"><strong>THE TIDE</strong><span id="tide-label">close to the metal</span></div>
           <div class="tide-track" aria-hidden="true"><div class="tide-fill" id="tide-fill"></div></div>
-          <p>less machinery <span aria-hidden="true">←</span> abstraction <span aria-hidden="true">→</span> more machinery</p>
+          <p><strong>Abstraction</strong>—machinery that hides repetitive lower-level work—rises and falls here: <span aria-hidden="true">←</span> less of it, more control · more of it, more convenience <span aria-hidden="true">→</span></p>
         </div>
       </div>
 
@@ -237,6 +238,7 @@
           <p class="pain" id="pain"></p>
           <div class="proof"><strong>Apps that made the promise visible</strong><span id="apps"></span></div>
           <div class="winner"><span class="chip">Who won &amp; why</span><strong id="winner"></strong></div>
+          <p class="dx-note">DX (developer experience): how fast and understandable the work feels to the people building and maintaining it.</p>
         </section>
       </div>
     </div>
@@ -246,7 +248,7 @@
     <div class="section-head"><div><div class="label">Zoom out</div><h2 id="threads-title">Five threads kept crossing</h2></div><p>History did not march neatly upward. Each layer solved a real pain, then created the next one.</p></div>
     <div class="thread-line"><strong>HTML</strong><p>Browser document → server-made page → client-made interface → server rendering returns. The pendulum moves toward whichever side can make the experience simpler or faster.</p></div>
     <div class="thread-line"><strong>JavaScript</strong><p>Hand-written DOM calls → jQuery shortcuts → whole-app frameworks → React components → more work handed back to capable browser APIs.</p></div>
-    <div class="thread-line"><strong>Build</strong><p>None → task runners such as Grunt (2012) and Gulp (2013) → webpack’s bundler era → Vite’s fast dev server and native ES modules. Bun joined the toolchain race, then Anthropic acquired it in December 2025.</p></div>
+    <div class="thread-line"><strong>Build</strong><p>None → task runners such as Grunt (2012) and Gulp (2013), which ran ordered lists of file jobs → webpack’s bundler era, which instead followed each file’s own imports to package an application’s connected pieces → Vite’s fast dev server and native ES modules. Bun joined the toolchain race, then Anthropic acquired it in December 2025.</p></div>
     <div class="thread-line"><strong>Language</strong><p>JavaScript stayed the language browsers run. TypeScript won the typing race by catching many mistakes before the page runs, then compiling back to JavaScript.</p></div>
     <div class="thread-line"><strong>CSS aside</strong><p>Hand-written CSS grew Sass variables and nesting, then utility systems such as Tailwind traded named styles for small classes composed in HTML. Native CSS later absorbed variables, nesting, and more.</p></div>
   </section>
@@ -309,6 +311,14 @@
     <details>
       <summary id="build-log-title">Build signoff · a tiny history of this history</summary>
       <div class="build-entry">
+        <div><strong>2026-07-12</strong><br><span class="label">11:50 UTC · glossary polish</span></div>
+        <div>
+          <p><strong>Lead: Claude · claude-sonnet-5.</strong> Overnight polish pass over the existing v0: gave first-appearance plain-English glosses to terms the page already used but never defined—DOM, native ES modules, data binding, component, state, build step, abstraction, and DX—tied each to the shared “Add a to-do” example, and sharpened the task-runner-vs-bundler contrast in the Build thread. No architecture, layout, or era lineup changed.</p>
+          <ul><li><strong>No subagents.</strong> One continuous editing and verification pass; runtime exposed the exact model ID (claude-sonnet-5), so no ID was guessed.</li></ul>
+          <p>Verified: Node syntax check on the extracted script; a grep sweep for personal names, absolute paths, external URLs, analytics, <code>fetch</code>/<code>XMLHttpRequest</code>, and storage APIs (none found); <code>git diff --check</code> (clean); and a headless-Chromium (Playwright, local binary, no install) pass exercising light/dark and 1280px/340px/320px viewports—zero console errors, zero non-<code>file://</code> requests, <code>scrollWidth &lt;= clientWidth</code> in every combination, reduced-motion disabling the tide transition, Add/blank-guard/long-text-wrap/checkbox-label behavior, and slider Home/End/Arrow/Page Up/Down across all six eras.</p>
+        </div>
+      </div>
+      <div class="build-entry">
         <div><strong>2026-07-12</strong><br><span class="label">00:22 HST · systems map</span></div>
         <div>
           <p><strong>Lead: Codex · gpt-5.6-sol.</strong> Added a bottom-of-page scope map for hosting/CDNs, servers/APIs, data, identity/security, DNS/request routing, and operations, including a current Vercel/Netlify/Cloudflare orientation; verified primary vendor documentation, syntax, responsive rendering, privacy, and the final diff.</p>
@@ -368,8 +378,8 @@
       year: '2006', name: 'jQuery + AJAX', tide: 46, tideLabel: 'a useful browser shim',
       code: `$('#todo-form').on('submit', function (event) {\n  event.preventDefault();\n\n  $.post('/todos', {\n    todo: $('#todo-input').val()\n  }, function (item) {\n    $('#todo-list').append(\n      $('<li>').text(item.text)\n    );\n  });\n});`,
       why: 'Why add a library for a button click?',
-      happening: 'AJAX means “ask the server in the background.” jQuery, released in 2006, gives one short API for finding elements, handling events, and making that request despite browser differences. The server still owns data; JavaScript updates only the changed list.',
-      pain: 'Pain that pushed change: as pages became app-like, scattered callbacks and manual DOM edits became hard to reason about. Build tools later tried to tame the growing pile—Grunt in 2012 and Gulp in 2013 automated repetitive CSS and JavaScript jobs.',
+      happening: 'AJAX means asking the server for data in the background, then updating just part of the page instead of reloading it. jQuery, released in 2006, gives one short API for finding and changing elements in the DOM—the Document Object Model, the browser’s live, scriptable copy of the page it is showing—for handling events, and for making that background request despite browser differences. The server still owns the data; JavaScript reaches into the DOM and updates only the changed list.',
+      pain: 'Pain that pushed change: as pages grew more app-like, hand-editing the DOM in scattered callbacks became hard to track—whose code touched which element, and when? Task runners such as Grunt (2012) and Gulp (2013) later tried to tame the growing pile of files by running ordered lists of repetitive jobs.',
       apps: 'Gmail and Google Maps made no-reload interactions feel inevitable. They demonstrated AJAX rather than jQuery itself; Google Code’s public use of jQuery in 2007 showed the compatibility helper spreading into major sites.',
       flowCaption: 'The server still owns data; JavaScript patches only the changed part of the page.',
       flow: [['Browser + jQuery', 'catches submit'], ['AJAX request', 'sends in background'], ['Server API', 'saves and replies'], ['DOM patch', 'appends one <li>']],
@@ -379,8 +389,8 @@
       year: '2013', name: 'AngularJS / Backbone SPA', tide: 72, tideLabel: 'the browser becomes the app',
       code: `// AngularJS controller\n$scope.todos = [];\n\n$scope.addTodo = function () {\n  $http.post('/todos', {\n    text: $scope.newTodo\n  }).then(function (response) {\n    $scope.todos.push(response.data);\n    $scope.newTodo = '';\n  });\n};`,
       why: 'Why build a whole app in the browser?',
-      happening: 'A single-page app (SPA) loads one shell, then JavaScript swaps views without full reloads. AngularJS (around 2010) binds data to HTML; Backbone supplies lighter structure. The client now generates much of the interface.',
-      pain: 'Pain that pushed change: two-way binding and framework-specific rules could hide when and why state changed. Large SPAs shipped lots of JavaScript. Angular 2’s incompatible 2016 rewrite also broke trust: teams learned that a framework’s upgrade path is part of its cost.',
+      happening: 'A single-page application (SPA) loads one application shell, then JavaScript swaps what’s visible instead of requesting a new page. AngularJS (around 2010) leans on data binding: framework machinery that automatically keeps JavaScript data and the displayed HTML in sync, so pushing a new item into $scope.todos alone updates the list on screen. Backbone instead supplies lighter structure, without built-in binding. Either way, the client now generates much of the interface itself.',
+      pain: 'Pain that pushed change: invisible two-way binding could make it hard to trace which change triggered which update, and large SPAs shipped a lot of JavaScript before anything appeared. Angular 2’s incompatible 2016 rewrite also broke trust: teams learned that a framework’s upgrade path is part of its real cost.',
       apps: 'Trello was built from the ground up with Backbone models, views, and routes. Its real-time boards showed why a browser needed application structure, not just scattered click handlers.',
       flowCaption: 'The browser holds an application model and turns changing data into changing views.',
       flow: [['App shell', 'loads once'], ['Controller', 'handles Add'], ['Client model', 'updates todos'], ['Data binding', 'updates the view'], ['API', 'persists remotely']],
@@ -390,8 +400,8 @@
       year: '2016', name: 'React + webpack', tide: 90, tideLabel: 'maximum toolchain',
       code: `class TodoApp extends React.Component {\n  state = { text: '', todos: [] };\n\n  addTodo = event => {\n    event.preventDefault();\n    this.setState(({ todos, text }) => ({\n      todos: [...todos, { text, done: false }],\n      text: ''\n    }));\n  };\n\n  render() {\n    return <form onSubmit={this.addTodo}>…</form>;\n  }\n}`,
       why: 'Why rebuild the interface from state?',
-      happening: 'React, released in 2013, treats the screen as a result of data called state. Change the array; React updates the DOM. Components make large interfaces easier to split and reuse. webpack—born around 2012—bundles JSX, modules, CSS, and assets for browsers.',
-      pain: 'Pain that pushed change: installing, configuring, and waiting for the build system became a job of its own. React made view logic predictable, but the surrounding webpack/Babel ecosystem could be slow and bewildering for one small form.',
+      happening: 'React, released in 2013, treats the screen as a result of state: the current data that determines what the interface shows—here, the to-do array. Change the array and call setState; React works out how to update the DOM itself. React also organizes an interface into components: reusable pieces of interface bundled with their own behavior, which helped teams split large screens into manageable, reusable parts instead of one tangled page. Before any of that reaches a browser, webpack—born around 2012—runs a build step: work done ahead of time that bundles JSX, modules, CSS, and assets into files a browser can run.',
+      pain: 'Pain that pushed change: installing, configuring, and waiting for the build system became a job of its own. React made view logic predictable, but the surrounding webpack/Babel toolchain could be slow and bewildering for one small form.',
       apps: 'Facebook proved React inside a huge changing interface; Khan Academy was an early high-profile external deployment. Real products made “the screen is a function of state” more than a conference idea.',
       flowCaption: 'A build prepares the app; at runtime, state becomes interface.',
       flow: [['webpack build', 'packages modules + JSX'], ['Browser event', 'calls addTodo'], ['React state', 'creates new array'], ['React render', 'calculates the change'], ['DOM', 'updates the list']],
@@ -401,7 +411,7 @@
       year: '2024', name: 'React + Vite + TypeScript', tide: 64, tideLabel: 'the platform catches up',
       code: `type Todo = { text: string; done: boolean };\nconst [todos, setTodos] = useState<Todo[]>([]);\nconst [text, setText] = useState('');\n\nfunction addTodo(e: FormEvent) {\n  e.preventDefault();\n  if (!text.trim()) return;\n  setTodos(items => [\n    ...items, { text: text.trim(), done: false }\n  ]);\n  setText('');\n}`,
       why: 'Why keep React but replace so much around it?',
-      happening: 'TypeScript catches many shape mistakes before the browser runs the code. Vite, released in 2020, serves source modules quickly during development and builds an optimized site for release. Native ES modules let the browser share more of the work.',
+      happening: 'TypeScript adds type checking: describing the expected shape of data—like a Todo with a text string and a done boolean—and catching mismatches before the code ever runs, then compiling down to ordinary JavaScript for the browser. Vite, released in 2020, leans on native ES modules—the browser’s own built-in understanding of JavaScript’s import/export syntax—to serve source files directly during development instead of bundling everything up front; it still builds an optimized bundle for release.',
       pain: 'What still hurts: this tiny to-do can be built with plain HTML, CSS, and JavaScript—just like the page you are using. Frameworks still pay off at scale, but “modern” increasingly means choosing the least machinery that fits.',
       apps: 'StackBlitz made Vite-powered projects run directly in a browser, turning “instant start” into something people could feel. Vite then spread through app frameworks including SvelteKit, Astro, and React Router.',
       flowCaption: 'Types check the source; Vite leans on browser modules; React still maps state to UI.',
