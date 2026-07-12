@@ -43,6 +43,46 @@ Treat the current page as a strong v0 and make a judgment-led polish pass:
 6. Refine hierarchy, spacing, typography, code readability, and narrow-screen behavior without turning the page into a generic card dashboard or adding decorative effects that obscure the lesson.
 7. Keep the AI-assisted coda honest: it is a new abstraction and feedback-loop layer, not an escape from architecture, testing, accessibility, security, or ownership.
 
+## Teaching depth: use the real words, then make them understandable
+
+Develop the explanations enough that a smart beginner leaves with a durable mental model, not just a timeline of brand names. Preserve the field’s real terms of art and framework names; do not replace them with vague metaphors. The first time a term appears, give it a short plain-English gloss in the sentence or immediately beside it.
+
+The learner should understand these ideas by the end:
+
+- **Static HTML**: a finished document already exists on the server. The browser receives and displays it.
+- **Server rendering**: code on the server combines templates and saved data to produce the HTML for each request.
+- **DOM (Document Object Model)**: the browser’s live, scriptable representation of the page. Explain why hand-editing it became tedious.
+- **AJAX**: a background request that exchanges data without replacing the whole page. Explain the effect, not the acronym’s historical expansion.
+- **SPA (single-page application)**: the browser loads an application shell, then JavaScript changes the visible interface and manages navigation.
+- **Data binding**: framework machinery that keeps data and displayed HTML in sync; note why invisible two-way updates could become confusing.
+- **State**: the current data that determines what the interface shows. Use the to-do array as the concrete example.
+- **Component**: a reusable piece of interface with its related behavior. Show why React’s component/state model helped teams organize larger screens.
+- **Build step**: work done before browser delivery—such as transforming, combining, checking, or optimizing source files.
+- **Task runner versus bundler**: Grunt/Gulp automated lists of jobs; webpack followed imports and packaged an application’s connected files. Keep this distinction to one clear contrast.
+- **Native ES modules**: the browser can directly understand JavaScript `import`/`export`, allowing tools such as Vite to do less work during development.
+- **Type checking / TypeScript**: checking expected data shapes before code runs, then producing ordinary JavaScript for the browser.
+- **Abstraction**: machinery that hides repetitive lower-level work. Tie the tide indicator to what developers gained and what complexity they accepted.
+- **DX (developer experience)**: how fast and understandable the work feels to the people building and maintaining the site.
+
+For every era, connect the terms to the exact same sequence:
+
+1. A person enters a to-do and presses **Add**.
+2. Identify where that event is handled: browser, server, or both.
+3. Identify where the new item is stored for the example.
+4. Identify who creates or updates the `<li>`: a person editing a file, the server, hand-written DOM code, jQuery, a framework, or React state.
+5. State what the user experiences: manual update, full reload, background update, or client-side state change.
+6. Name the real pain that made the next approach attractive.
+
+The code samples should remain faithful and recognizable, but they are teaching excerpts rather than production applications. Prefer the smallest sample that reveals the era’s organizing idea. Add a short annotation only when the important line is otherwise easy to miss.
+
+Avoid going into the weeds. Do not add package-install commands, configuration files, loader/plugin inventories, framework API surveys, browser-engine internals, database design, routing edge cases, hydration variants, or a comprehensive CSS history. Mention a detail only when it helps explain the Add action, the client/server pendulum, the abstraction tide, or why developers changed tools.
+
+Aim for layered readability:
+
+- A skimming beginner can follow the era title, “why,” pain, winner, and tide.
+- A curious reader can understand the code sample and the glossary-level definitions.
+- An experienced developer sees historically credible terminology and tradeoffs without mistaking the page for exhaustive documentation.
+
 ## Verification bar
 
 Before shipping:
