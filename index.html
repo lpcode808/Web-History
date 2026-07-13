@@ -90,6 +90,12 @@
   .tide-track { height: 8px; margin: .7rem 0 .45rem; background: var(--soft); overflow: hidden; }
   .tide-fill { width: 10%; height: 100%; background: var(--accent); transition: width 220ms ease-out; }
   .tide p { margin: 0; font-size: .78rem; line-height: 1.35; }
+  .tide-shape { display: grid; grid-template-columns: auto 1fr; gap: .55rem; align-items: center; margin-top: .7rem; padding-top: .65rem; border-top: 1px dashed var(--rule); }
+  .tide-shape span { color: var(--muted); font-size: .65rem; line-height: 1.15; text-transform: uppercase; letter-spacing: .05em; }
+  .tide-shape svg { display: block; width: 100%; height: 2.5rem; overflow: visible; }
+  .tide-line { fill: none; stroke: var(--muted); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  .tide-dot { fill: var(--surface); stroke: var(--muted); stroke-width: 1.25; vector-effect: non-scaling-stroke; }
+  .tide-active { fill: var(--accent); stroke: var(--ink); stroke-width: 1.5; vector-effect: non-scaling-stroke; transition: cx 220ms ease-out, cy 220ms ease-out; }
   .logic-map { margin: 0 0 1.25rem; padding: 1rem 1.25rem; border: 1px solid var(--rule); background: var(--surface); }
   .logic-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; margin-bottom: .8rem; }
   .logic-head p { margin: 0; color: var(--muted); font-size: .78rem; }
@@ -160,7 +166,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .tide-fill { transition: none; }
+    .tide-fill, .tide-active { transition: none; }
   }
   @media print {
     :root { --paper: #fff; --surface: #fff; --ink: #111; --muted: #444; --rule: #bbb; }
@@ -223,6 +229,14 @@
           <div class="tide-top"><strong>THE TIDE</strong><span id="tide-label">close to the metal</span></div>
           <div class="tide-track" aria-hidden="true"><div class="tide-fill" id="tide-fill"></div></div>
           <p><strong>Abstraction</strong>—machinery that hides repetitive lower-level work—rises and falls here: <span aria-hidden="true">←</span> less of it, more control · more of it, more convenience <span aria-hidden="true">→</span></p>
+          <div class="tide-shape" aria-hidden="true">
+            <span>the whole<br>tide</span>
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+              <polyline class="tide-line" points="8,33 25,26 42,21 59,13 76,7 93,16"></polyline>
+              <g><circle class="tide-dot" cx="8" cy="33" r="2.2"></circle><circle class="tide-dot" cx="25" cy="26" r="2.2"></circle><circle class="tide-dot" cx="42" cy="21" r="2.2"></circle><circle class="tide-dot" cx="59" cy="13" r="2.2"></circle><circle class="tide-dot" cx="76" cy="7" r="2.2"></circle><circle class="tide-dot" cx="93" cy="16" r="2.2"></circle></g>
+              <circle class="tide-active" id="tide-active" cx="8" cy="33" r="3"></circle>
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -321,6 +335,13 @@
   <section class="shell build-log" aria-labelledby="build-log-title">
     <details>
       <summary id="build-log-title">Build signoff · a tiny history of this history</summary>
+      <div class="build-entry">
+        <div><strong>2026-07-12</strong><br><span class="label">21:23 HST · whole-tide pass</span></div>
+        <div>
+          <p><strong>Lead: Codex · gpt-5.6-sol.</strong> Continued from the merged overnight work by turning the abstraction metaphor into a persistent six-era curve with a scrubber-synchronized active point, so the rise and partial retreat stay visible at every stop. Verified JavaScript syntax, desktop rendering, the six-point data mapping, reduced-motion handling, privacy, and the final diff.</p>
+          <ul><li><strong>No subagents.</strong> This was one tightly scoped visual-interaction correction.</li></ul>
+        </div>
+      </div>
       <div class="build-entry">
         <div><strong>2026-07-12</strong><br><span class="label">18:04 UTC · anatomy strip</span></div>
         <div>
@@ -485,7 +506,8 @@
     factEvent: document.querySelector('#fact-event'), factStored: document.querySelector('#fact-stored'),
     factLi: document.querySelector('#fact-li'), factFeel: document.querySelector('#fact-feel'),
     flow: document.querySelector('#logic-flow'), flowCaption: document.querySelector('#logic-caption'),
-    tide: document.querySelector('#tide-fill'), tideLabel: document.querySelector('#tide-label'), tideMeter: document.querySelector('#tide-meter')
+    tide: document.querySelector('#tide-fill'), tideLabel: document.querySelector('#tide-label'),
+    tideMeter: document.querySelector('#tide-meter'), tideActive: document.querySelector('#tide-active')
   };
 
   function showEra(index) {
@@ -520,6 +542,9 @@
     fields.tideLabel.textContent = era.tideLabel;
     fields.tideMeter.setAttribute('aria-valuenow', era.tide);
     fields.tideMeter.setAttribute('aria-valuetext', `${era.tide} percent, ${era.tideLabel}`);
+    const tidePoints = [[8, 33], [25, 26], [42, 21], [59, 13], [76, 7], [93, 16]];
+    fields.tideActive.setAttribute('cx', tidePoints[index][0]);
+    fields.tideActive.setAttribute('cy', tidePoints[index][1]);
     slider.setAttribute('aria-valuetext', `${era.year}: ${era.name}`);
     stops.forEach((stop, i) => stop.classList.toggle('active', i === index));
   }
