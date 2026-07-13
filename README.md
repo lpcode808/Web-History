@@ -6,7 +6,7 @@ Open `index.html` in any modern browser. No install, build step, external font, 
 
 ## Interaction
 
-- Drag the era slider or use the arrow, Page Up/Down, Home, and End keys.
+- Choose a labeled era directly, drag the era slider, or use the arrow, Page Up/Down, Home, and End keys.
 - Add and check items in the live to-do specimen.
 - Light and dark themes follow the operating-system preference.
 

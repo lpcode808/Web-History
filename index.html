@@ -67,7 +67,8 @@
   .todo-form button { padding: .72rem 1rem; color: var(--accent-ink); background: var(--accent); border: 1px solid var(--ink); border-radius: 0; font-weight: 800; cursor: pointer; }
   .todo-form button:hover { filter: brightness(.92); }
   #todo-list { min-height: 5.4rem; margin: 0; padding: 0; list-style: none; }
-  #todo-list li { display: flex; gap: .7rem; align-items: flex-start; padding: .65rem 0; border-top: 1px dashed var(--rule); overflow-wrap: anywhere; }
+  #todo-list li { border-top: 1px dashed var(--rule); overflow-wrap: anywhere; }
+  #todo-list li > label { display: flex; gap: .7rem; align-items: flex-start; min-height: 44px; padding: .65rem 0; cursor: pointer; }
   #todo-list input { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; margin-top: .25rem; }
   #todo-list .done { color: var(--muted); text-decoration: line-through; }
   .empty { color: var(--muted); font-style: italic; }
@@ -76,11 +77,11 @@
   .section-head p { margin: 0; color: var(--muted); }
   .timeline { margin: 2.5rem 0 1.5rem; }
   .timeline input { width: 100%; cursor: ew-resize; }
-  .stops { display: grid; grid-template-columns: repeat(6, 1fr); margin-top: .65rem; }
-  .stop { padding: 0 .25rem; color: var(--muted); font-size: .7rem; line-height: 1.25; text-align: center; }
-  .stop:first-child { text-align: left; }
-  .stop:last-child { text-align: right; }
-  .stop.active { color: var(--ink); font-weight: 800; }
+  .timeline-status { margin: .35rem 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
+  .stops { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .35rem; margin-top: .65rem; }
+  .stop { min-height: 44px; padding: .35rem .25rem; color: var(--muted); background: transparent; border: 0; border-bottom: 2px solid transparent; font-size: .7rem; line-height: 1.25; text-align: center; cursor: pointer; }
+  .stop:hover { color: var(--ink); background: var(--soft); }
+  .stop.active { color: var(--ink); border-bottom-color: var(--accent); font-weight: 800; }
   .era-status { display: grid; grid-template-columns: 1fr minmax(240px, 360px); gap: 1.25rem; align-items: stretch; margin-bottom: 1.25rem; }
   .era-title { display: flex; flex-wrap: wrap; gap: .65rem 1rem; align-items: baseline; padding: 1.1rem 1.25rem; background: var(--ink); color: var(--paper); }
   .era-title h3 { margin: 0; font-family: var(--display); font-size: clamp(1.6rem, 4vw, 2.5rem); line-height: 1; }
@@ -104,13 +105,17 @@
   .flow-node strong { font-size: .82rem; line-height: 1.2; }
   .flow-node span { color: var(--muted); font-size: .72rem; line-height: 1.3; }
   .flow-arrow { flex: 0 0 auto; align-self: center; color: var(--accent); font-weight: 900; }
-  .panels { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); border: 1px solid var(--ink); background: var(--surface); box-shadow: var(--shadow); }
-  .code-panel { min-width: 0; padding: clamp(1rem, 2.5vw, 1.5rem); background: var(--code); color: var(--code-ink); }
+  .panels { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); grid-template-areas: "code note"; border: 1px solid var(--ink); background: var(--surface); box-shadow: var(--shadow); }
+  .code-panel { grid-area: code; min-width: 0; padding: clamp(1rem, 2.5vw, 1.5rem); background: var(--code); color: var(--code-ink); }
   .code-panel .label { color: #d9a441; }
+  .code-caveat { margin: .8rem 0 0; color: #c5beaf; font-size: .72rem; line-height: 1.4; }
   pre { max-width: 100%; margin: .8rem 0 0; overflow-x: auto; overscroll-behavior-inline: contain; font: .81rem/1.65 var(--mono); tab-size: 2; white-space: pre; }
   code { font-family: inherit; }
-  .note-panel { padding: clamp(1.1rem, 3vw, 2rem); }
+  .note-panel { grid-area: note; padding: clamp(1.1rem, 3vw, 2rem); }
   .note-panel p { margin: .7rem 0; }
+  .change { margin: 0 0 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+  .change strong { display: block; margin-bottom: .2rem; color: var(--accent); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+  .change span { font-family: var(--display); font-size: 1.05rem; font-weight: 700; line-height: 1.35; }
   .question { font-family: var(--display); font-size: 1.28rem; font-weight: 700; line-height: 1.2; }
   .pain { color: var(--muted); }
   .dx-note { margin: .6rem 0 0; color: var(--muted); font-size: .74rem; line-height: 1.4; }
@@ -152,9 +157,10 @@
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
   @media (max-width: 760px) {
     .specimen-wrap, .section-head, .era-status, .panels { grid-template-columns: 1fr; }
+    .panels { grid-template-areas: "note" "code"; }
     .section-head { gap: .5rem; }
-    .stop span { display: none; }
-    .stop { font-size: .65rem; }
+    .stops { grid-template-columns: repeat(6, minmax(7rem, 1fr)); overflow-x: auto; padding-bottom: .35rem; scrollbar-width: thin; }
+    .stop { font-size: .68rem; }
     .todo-form { grid-template-columns: 1fr; }
     .todo-form button { min-height: 44px; }
     .anatomy { grid-template-columns: 1fr; gap: .65rem; }
@@ -195,7 +201,8 @@
     <div class="specimen-copy">
       <div class="label">The live specimen</div>
       <h2 id="specimen-title">The ordinary page we keep rebuilding</h2>
-      <p>This real to-do list is the entire running example. Type, add, check. The history below changes; this little job does not.</p>
+      <p>This real to-do list is the entire running example. Type, add, check. This working specimen uses small, modern vanilla JavaScript; the timeline changes the historical model and sample, not the live list.</p>
+      <p><strong>Local only:</strong> it resets when you reload and sends nothing anywhere.</p>
     </div>
     <div class="todo-app">
       <div class="window-bar"><strong>today.html</strong><div class="lights" aria-hidden="true"><span></span><span></span><span></span></div></div>
@@ -212,23 +219,24 @@
     <div class="shell">
       <div class="section-head">
         <div><div class="label">Drag the years</div><h2 id="eras-title">Same click, different machinery</h2></div>
-        <p>Use the slider, arrow keys, Page Up/Down, Home, or End. The diagram and lesson change together.</p>
+        <p>Choose an era label directly, or scrub with the slider, arrow keys, Page Up/Down, Home, or End. The diagram and lesson change together.</p>
       </div>
       <div class="timeline">
         <label class="sr-only" for="era-slider">Choose a web-development era</label>
         <input id="era-slider" type="range" min="0" max="5" value="0" step="1" aria-describedby="slider-help">
         <p id="slider-help" class="sr-only">Six stops from 1996 through 2024.</p>
-        <div class="stops" aria-hidden="true">
-          <div class="stop active">1996<br><span>static HTML</span></div><div class="stop">2002<br><span>PHP / CGI</span></div><div class="stop">2006<br><span>jQuery</span></div><div class="stop">2013<br><span>SPA</span></div><div class="stop">2016<br><span>React</span></div><div class="stop">2024<br><span>Vite + TS</span></div>
+        <p class="timeline-status" id="timeline-status" aria-live="polite">Era 1 of 6 · 1996 · Static HTML</p>
+        <div class="stops" role="group" aria-label="Choose an era directly">
+          <button class="stop active" type="button" data-era="0" aria-current="true">1996<br><span>static HTML</span></button><button class="stop" type="button" data-era="1">2002<br><span>PHP / CGI</span></button><button class="stop" type="button" data-era="2">2006<br><span>jQuery</span></button><button class="stop" type="button" data-era="3">2013<br><span>AngularJS SPA</span></button><button class="stop" type="button" data-era="4">2016<br><span>React + webpack</span></button><button class="stop" type="button" data-era="5">2024<br><span>Vite + TS</span></button>
         </div>
       </div>
 
       <div class="era-status">
         <div class="era-title"><span class="year-tag" id="era-year">1996</span><h3 id="era-name">Static HTML</h3></div>
-        <div class="tide" id="tide-meter" role="progressbar" aria-label="The tide of abstraction" aria-valuemin="0" aria-valuemax="100" aria-valuenow="10" aria-valuetext="10 percent, close to the metal">
+        <div class="tide">
           <div class="tide-top"><strong>THE TIDE</strong><span id="tide-label">close to the metal</span></div>
           <div class="tide-track" aria-hidden="true"><div class="tide-fill" id="tide-fill"></div></div>
-          <p><strong>Abstraction</strong>—machinery that hides repetitive lower-level work—rises and falls here: <span aria-hidden="true">←</span> less of it, more control · more of it, more convenience <span aria-hidden="true">→</span></p>
+          <p><strong>Abstraction</strong>—machinery that hides repetitive lower-level work—rises and falls here. This curve is a teaching sketch, not a measured score: <span aria-hidden="true">←</span> less of it, more control · more of it, more convenience <span aria-hidden="true">→</span></p>
           <div class="tide-shape" aria-hidden="true">
             <span>the whole<br>tide</span>
             <svg viewBox="0 0 100 40" preserveAspectRatio="none">
@@ -246,12 +254,9 @@
       </section>
 
       <div class="panels">
-        <section class="code-panel" aria-labelledby="code-label">
-          <div class="label" id="code-label">The “Add” action</div>
-          <pre tabindex="0"><code id="code-sample"></code></pre>
-        </section>
         <section class="note-panel" aria-labelledby="note-label">
           <div class="label" id="note-label">Why this way?</div>
+          <div class="change"><strong>What changed</strong><span id="change"></span></div>
           <p class="question" id="why"></p>
           <p id="happening"></p>
           <div class="anatomy" aria-label="The same Add, step by step">
@@ -262,8 +267,13 @@
           </div>
           <p class="pain" id="pain"></p>
           <div class="proof"><strong>Apps that made the promise visible</strong><span id="apps"></span></div>
-          <div class="winner"><span class="chip">Who won &amp; why</span><strong id="winner"></strong></div>
+          <div class="winner"><span class="chip">What spread—and why</span><strong id="winner"></strong></div>
           <p class="dx-note">DX (developer experience): how fast and understandable the work feels to the people building and maintaining it.</p>
+        </section>
+        <section class="code-panel" aria-labelledby="code-label">
+          <div class="label" id="code-label">Simplified “Add” excerpt</div>
+          <pre tabindex="0"><code id="code-sample"></code></pre>
+          <p class="code-caveat">A teaching sketch, not production-ready code. Error handling, security, persistence, and surrounding markup are intentionally omitted.</p>
         </section>
       </div>
     </div>
@@ -273,8 +283,8 @@
     <div class="section-head"><div><div class="label">Zoom out</div><h2 id="threads-title">Five threads kept crossing</h2></div><p>History did not march neatly upward. Each layer solved a real pain, then created the next one.</p></div>
     <div class="thread-line"><strong>HTML</strong><p>Browser document → server-made page → client-made interface → server rendering returns. The pendulum moves toward whichever side can make the experience simpler or faster.</p></div>
     <div class="thread-line"><strong>JavaScript</strong><p>Hand-written DOM calls → jQuery shortcuts → whole-app frameworks → React components → more work handed back to capable browser APIs.</p></div>
-    <div class="thread-line"><strong>Build</strong><p>None → task runners such as Grunt (2012) and Gulp (2013), which ran ordered lists of file jobs → webpack’s bundler era, which instead followed each file’s own imports to package an application’s connected pieces → Vite’s fast dev server and native ES modules. Bun joined the toolchain race, then Anthropic acquired it in December 2025.</p></div>
-    <div class="thread-line"><strong>Language</strong><p>JavaScript stayed the language browsers run. TypeScript won the typing race by catching many mistakes before the page runs, then compiling back to JavaScript.</p></div>
+    <div class="thread-line"><strong>Build</strong><p>None → task runners such as Grunt (2012) and Gulp (2013), which ran ordered lists of file jobs → webpack’s bundler era, which instead followed each file’s own imports to package an application’s connected pieces → Vite’s fast dev server and native ES modules.</p></div>
+    <div class="thread-line"><strong>Language</strong><p>JavaScript stayed the language browsers run. TypeScript won the typing race by catching many mistakes when teams run a type check, then producing ordinary JavaScript for the browser.</p></div>
     <div class="thread-line"><strong>CSS aside</strong><p>Hand-written CSS grew Sass variables and nesting, then utility systems such as Tailwind traded named styles for small classes composed in HTML. Native CSS later absorbed variables, nesting, and more.</p></div>
   </section>
 
@@ -336,6 +346,18 @@
     <details>
       <summary id="build-log-title">Build signoff · a tiny history of this history</summary>
       <div class="build-entry">
+        <div><strong>2026-07-12</strong><br><span class="label">22:05 HST · four-person learner pass</span></div>
+        <div>
+          <p><strong>Lead: Codex · gpt-5.6-sol.</strong> Integrated a three-persona learner critique with an expert web-history, pedagogy, accessibility, and interface pass. Clarified that the live list is modern vanilla JavaScript and resets on reload; made all six era labels direct controls with visible progress; added a comparative “What changed” line to every stop; corrected the Vite/type-check and Hooks/class mental models; marked the tide and code excerpts as teaching sketches; softened adoption verdicts; moved explanation before code in mobile reading order; and made to-do rows larger, labeled targets that restore checkbox focus after rerendering.</p>
+          <ul>
+            <li><strong>Curious teen learner</strong> (runtime did not expose the exact model ID): tested jargon, motivation, implied promises, and beginner drop-off points.</li>
+            <li><strong>HTML/CSS beginner</strong> (runtime did not expose the exact model ID): tested client/server transitions, toolchain blur, repetition, and mobile navigation.</li>
+            <li><strong>Junior React/TypeScript learner</strong> (runtime did not expose the exact model ID): audited historical framing, code credibility, TypeScript/Vite accuracy, and accessibility mechanics.</li>
+          </ul>
+          <p>Verified JavaScript syntax, six synchronized era records and transition summaries, unique IDs, privacy constraints, and a clean diff. Browser interaction and rendered viewport checks were not run because the available browser blocked local-file navigation; this pass makes no visual-browser claims.</p>
+        </div>
+      </div>
+      <div class="build-entry">
         <div><strong>2026-07-12</strong><br><span class="label">21:23 HST · whole-tide pass</span></div>
         <div>
           <p><strong>Lead: Codex · gpt-5.6-sol.</strong> Continued from the merged overnight work by turning the abstraction metaphor into a persistent six-era curve with a scrubber-synchronized active point, so the rise and partial retreat stay visible at every stop. Verified JavaScript syntax, desktop rendering, the six-point data mapping, reduced-motion handling, privacy, and the final diff.</p>
@@ -394,6 +416,7 @@
   const eras = [
     {
       year: '1996', name: 'Static HTML', tide: 10, tideLabel: 'close to the metal',
+      change: 'Starting point: a person changes the document itself. Add has no application JavaScript on this page.',
       code: `<!-- No live Add action yet. -->\n<form action="thanks.html">\n  <input name="todo">\n  <button>Add</button>\n</form>\n\n<!-- A person edits and uploads the list. -->\n<ul>\n  <li>Buy milk</li>\n</ul>`,
       why: 'Why would anyone do it this way?',
       happening: 'The browser asks for a finished HTML document. The “app” is really a page: adding an item means sending a form or asking the site owner to edit the file and upload it again. HTML is generated ahead of time, not in the browser.',
@@ -402,15 +425,16 @@
       flowCaption: 'Mostly a document delivery path; persistence needs a person or a separate server script.',
       flow: [['Browser', 'shows the form'], ['HTTP request', 'loads another document'], ['Static file', 'already-written HTML'], ['Person', 'edits the list']],
       facts: {
-        event: 'Nowhere. No code runs; the form can only load another page.',
+        event: 'No application JavaScript handles it. The browser can only submit the form and load another page.',
         stored: 'Inside the HTML file itself, on the server’s disk.',
         li: 'A person, editing the file and uploading it again.',
         feel: 'A manual update—new items appear when the owner ships a new file.'
       },
-      winner: 'Netscape Navigator · distribution'
+      winner: 'Netscape Navigator · browser reach and distribution'
     },
     {
       year: '2002', name: 'Server-rendered PHP / CGI', tide: 30, tideLabel: 'logic moves to the server',
+      change: 'Before: a person edited the file. Now: server code saves the item and rebuilds the page. Result: shared data, but a full reload.',
       code: `<?php\n$todo = trim($_POST['todo'] ?? '');\nif ($todo !== '') {\n  file_put_contents(\n    'todos.txt', $todo . "\\n", FILE_APPEND\n  );\n}\nheader('Location: /'); // reload the page\n?>`,
       why: 'Why put the work on a server?',
       happening: 'A form sends the new text to PHP or a CGI program (CGI: the early standard for handing a web request to a script). This is server rendering: code on the server combines a template with saved data to produce the HTML for each request. The server saves the item, rebuilds the page, and sends the whole thing back—one central machine keeps everybody’s data while the browser stays simple.',
@@ -424,10 +448,11 @@
         li: 'The server template, rebuilding the whole page.',
         feel: 'A full page reload for every Add.'
       },
-      winner: 'Internet Explorer · distribution'
+      winner: 'Internet Explorer · Windows distribution'
     },
     {
       year: '2006', name: 'jQuery + AJAX', tide: 46, tideLabel: 'a thin compatibility layer',
+      change: 'Before: Add reloaded the whole page. Now: JavaScript sends a background request and patches one list item. Result: the action feels immediate.',
       code: `$('#todo-form').on('submit', function (event) {\n  event.preventDefault();\n\n  $.post('/todos', {\n    todo: $('#todo-input').val()\n  }, function (item) {\n    $('#todo-list').append(\n      $('<li>').text(item.text)\n    );\n  });\n});`,
       why: 'Why add a library for a button click?',
       happening: 'AJAX means asking the server for data in the background, then updating just part of the page instead of reloading it. jQuery, released in 2006, gives one short API for finding and changing elements in the DOM—the Document Object Model, the browser’s live, scriptable copy of the page it is showing—for handling events, and for making that background request despite browser differences. The server still owns the data; JavaScript reaches into the DOM and updates only the changed list.',
@@ -441,10 +466,11 @@
         li: 'Hand-written jQuery code, appending one element to the DOM.',
         feel: 'A background update—the list grows with no reload.'
       },
-      winner: 'jQuery · distribution'
+      winner: 'jQuery · shorter cross-browser DOM and AJAX code'
     },
     {
-      year: '2013', name: 'AngularJS / Backbone SPA', tide: 72, tideLabel: 'the browser becomes the app',
+      year: '2013', name: 'AngularJS SPA / Backbone era', tide: 72, tideLabel: 'the browser becomes the app',
+      change: 'Before: callbacks edited DOM nodes by hand. Now: a client model and framework keep data and views in sync. Result: less DOM code, more framework behavior.',
       code: `// AngularJS controller\n$scope.todos = [];\n\n$scope.addTodo = function () {\n  $http.post('/todos', {\n    text: $scope.newTodo\n  }).then(function (response) {\n    $scope.todos.push(response.data);\n    $scope.newTodo = '';\n  });\n};`,
       why: 'Why build a whole app in the browser?',
       happening: 'A single-page application (SPA) loads one application shell, then JavaScript swaps what’s visible instead of requesting a new page. AngularJS (around 2010) leans on data binding: framework machinery that automatically keeps JavaScript data and the displayed HTML in sync, so pushing a new item into $scope.todos alone updates the list on screen. Backbone instead supplies lighter structure, without built-in binding. Either way, the client now generates much of the interface itself.',
@@ -458,10 +484,11 @@
         li: 'Data binding—the framework redraws the view from the model.',
         feel: 'An instant in-app change; no page reload.'
       },
-      winner: 'AngularJS · performance + DX'
+      winner: 'SPA frameworks · structure for growing browser applications'
     },
     {
       year: '2016', name: 'React + webpack', tide: 90, tideLabel: 'maximum toolchain',
+      change: 'Before: framework binding could update data in several directions. Now: React makes the view a result of state. Result: clearer updates, plus a larger build toolchain.',
       code: `class TodoApp extends React.Component {\n  state = { text: '', todos: [] };\n\n  addTodo = event => {\n    event.preventDefault();\n    this.setState(({ todos, text }) => ({\n      todos: [...todos, { text, done: false }],\n      text: ''\n    }));\n  };\n\n  render() {\n    return <form onSubmit={this.addTodo}>…</form>;\n  }\n}`,
       why: 'Why rebuild the interface from state?',
       happening: 'React, released in 2013, treats the screen as a result of state: the current data that determines what the interface shows—here, the to-do array. Change the array and call setState; React works out how to update the DOM itself. React also organizes an interface into components: reusable pieces of interface bundled with their own behavior, which helped teams split large screens into manageable, reusable parts instead of one tangled page. Before any of that reaches a browser, webpack—born around 2012—runs a build step: work done ahead of time that turns JSX (the HTML-like tags written inside JavaScript, visible in the code sample), modules, CSS, and assets into files a browser can run.',
@@ -475,24 +502,25 @@
         li: 'React, recalculating the interface from the new state.',
         feel: 'An instant state change; the DOM follows automatically.'
       },
-      winner: 'React + webpack · performance + DX'
+      winner: 'React + webpack · predictable views and modular builds'
     },
     {
       year: '2024', name: 'React + Vite + TypeScript', tide: 64, tideLabel: 'the platform catches up',
+      change: 'Runtime: React still maps state to interface. Development: Vite serves transformed modules on demand; a separate type-check catches TypeScript errors.',
       code: `type Todo = { text: string; done: boolean };\nconst [todos, setTodos] = useState<Todo[]>([]);\nconst [text, setText] = useState('');\n\nfunction addTodo(e: FormEvent) {\n  e.preventDefault();\n  if (!text.trim()) return;\n  setTodos(items => [\n    ...items, { text: text.trim(), done: false }\n  ]);\n  setText('');\n}`,
       why: 'Why keep React but replace so much around it?',
-      happening: 'TypeScript adds type checking: describing the expected shape of data—like a Todo with a text string and a done boolean—and catching mismatches before the code ever runs, then compiling down to ordinary JavaScript for the browser. Vite, released in 2020, leans on native ES modules—the browser’s own built-in understanding of JavaScript’s import/export syntax—to serve source files directly during development instead of bundling everything up front; it still builds an optimized bundle for release. React itself moved too: the newer Hooks style—the useState calls in the sample—replaced 2016’s class components.',
+      happening: 'TypeScript adds type checking: describing the expected shape of data—like a Todo with a text string and a done boolean—and letting an editor or a separate TypeScript check catch mismatches before release. Vite transforms TypeScript and JSX into JavaScript the browser can run, but does not type-check them by default. Released in 2020, Vite leans on native ES modules—the browser’s built-in understanding of JavaScript import/export—to serve transformed source modules on demand during development instead of bundling the whole app up front; it still builds an optimized bundle for release. React moved too: the Hooks style—the useState calls in the sample—became dominant, while class components remained supported.',
       pain: 'What still hurts: this tiny to-do can be built with plain HTML, CSS, and JavaScript—just like the page you are using. Frameworks still pay off at scale, but “modern” increasingly means choosing the least machinery that fits.',
       apps: 'StackBlitz made Vite-powered projects run directly in a browser, turning “instant start” into something people could feel. Vite then spread through app frameworks including SvelteKit, Astro, and React Router.',
       flowCaption: 'Types check the source; Vite leans on browser modules; React still maps state to UI.',
-      flow: [['TypeScript source', 'describes Todo shape'], ['Type check', 'catches mismatches'], ['Vite dev server', 'serves modules on demand'], ['React state', 'adds the item'], ['DOM', 'updates the list']],
+      flow: [['TypeScript source', 'describes Todo shape'], ['Separate type check', 'catches mismatches'], ['Vite dev server', 'transforms + serves modules'], ['React state', 'adds the item'], ['DOM', 'updates the list']],
       facts: {
         event: 'In the browser, in a typed addTodo function.',
-        stored: 'In React state, its shape checked by TypeScript before the code ran.',
+        stored: 'In React state; a separate TypeScript check can verify its shape before release.',
         li: 'Still React—state in, interface out.',
         feel: 'The same instant update, reached with far less tooling wait.'
       },
-      winner: 'TypeScript + Vite · correctness + DX'
+      winner: 'TypeScript + Vite · earlier feedback and faster development'
     }
   ];
 
@@ -500,14 +528,14 @@
   const stops = [...document.querySelectorAll('.stop')];
   const fields = {
     year: document.querySelector('#era-year'), name: document.querySelector('#era-name'),
-    code: document.querySelector('#code-sample'), why: document.querySelector('#why'),
+    code: document.querySelector('#code-sample'), change: document.querySelector('#change'), why: document.querySelector('#why'),
     happening: document.querySelector('#happening'), pain: document.querySelector('#pain'),
     winner: document.querySelector('#winner'), apps: document.querySelector('#apps'),
     factEvent: document.querySelector('#fact-event'), factStored: document.querySelector('#fact-stored'),
     factLi: document.querySelector('#fact-li'), factFeel: document.querySelector('#fact-feel'),
     flow: document.querySelector('#logic-flow'), flowCaption: document.querySelector('#logic-caption'),
     tide: document.querySelector('#tide-fill'), tideLabel: document.querySelector('#tide-label'),
-    tideMeter: document.querySelector('#tide-meter'), tideActive: document.querySelector('#tide-active')
+    tideActive: document.querySelector('#tide-active'), timelineStatus: document.querySelector('#timeline-status')
   };
 
   function showEra(index) {
@@ -515,6 +543,7 @@
     fields.year.textContent = era.year;
     fields.name.textContent = era.name;
     fields.code.textContent = era.code;
+    fields.change.textContent = era.change;
     fields.why.textContent = era.why;
     fields.happening.textContent = era.happening;
     fields.pain.textContent = era.pain;
@@ -540,15 +569,23 @@
     });
     fields.tide.style.width = `${era.tide}%`;
     fields.tideLabel.textContent = era.tideLabel;
-    fields.tideMeter.setAttribute('aria-valuenow', era.tide);
-    fields.tideMeter.setAttribute('aria-valuetext', `${era.tide} percent, ${era.tideLabel}`);
     const tidePoints = [[8, 33], [25, 26], [42, 21], [59, 13], [76, 7], [93, 16]];
     fields.tideActive.setAttribute('cx', tidePoints[index][0]);
     fields.tideActive.setAttribute('cy', tidePoints[index][1]);
     slider.setAttribute('aria-valuetext', `${era.year}: ${era.name}`);
-    stops.forEach((stop, i) => stop.classList.toggle('active', i === index));
+    fields.timelineStatus.textContent = `Era ${index + 1} of ${eras.length} · ${era.year} · ${era.name}`;
+    stops.forEach((stop, i) => {
+      const active = i === index;
+      stop.classList.toggle('active', active);
+      if (active) stop.setAttribute('aria-current', 'true');
+      else stop.removeAttribute('aria-current');
+    });
   }
   slider.addEventListener('input', event => showEra(Number(event.target.value)));
+  stops.forEach(stop => stop.addEventListener('click', () => {
+    slider.value = stop.dataset.era;
+    showEra(Number(stop.dataset.era));
+  }));
   slider.addEventListener('keydown', event => {
     if (event.key === 'PageUp' || event.key === 'PageDown') {
       event.preventDefault();
@@ -563,7 +600,7 @@
   const input = document.querySelector('#todo-input');
   const list = document.querySelector('#todo-list');
   let todos = [];
-  function renderTodos() {
+  function renderTodos(focusIndex = -1) {
     list.replaceChildren();
     if (!todos.length) {
       const empty = document.createElement('li');
@@ -571,13 +608,15 @@
     }
     todos.forEach((todo, index) => {
       const item = document.createElement('li');
+      const label = document.createElement('label');
       const box = document.createElement('input');
       const text = document.createElement('span');
       box.type = 'checkbox'; box.checked = todo.done;
       box.setAttribute('aria-label', `Mark “${todo.text}” ${todo.done ? 'not done' : 'done'}`);
-      box.addEventListener('change', () => { todos[index].done = box.checked; renderTodos(); });
+      box.addEventListener('change', () => { todos[index].done = box.checked; renderTodos(index); });
       text.textContent = todo.text; text.classList.toggle('done', todo.done);
-      item.append(box, text); list.append(item);
+      label.append(box, text); item.append(label); list.append(item);
+      if (index === focusIndex) box.focus();
     });
   }
   form.addEventListener('submit', event => {
