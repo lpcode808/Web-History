@@ -19,10 +19,10 @@ deployed and live on GitHub Pages (verified 2026-07-16, HTTP 200).
 
 ## Next
 
-- Re-run the browser verification battery against HEAD. The final signoff entry (22:05 HST) states browser interaction and rendered viewport checks were not run for that pass because the available browser blocked local-file navigation; the last full headless-Chromium pass predates the final learner-journey changes.
-- Real-device touch and mobile pass: scrubber drag, era-label taps, to-do flow on an actual phone.
-- Light/dark and reduced-motion check in real browsers (headless checks exist for earlier revisions; confirm on HEAD in at least one real browser per scheme).
-- Beginner reader test: have a novice read the page end to end and confirm they leave with the mental model the brief targets (HTML-generation pendulum, abstraction tide, why each era's pain drove the next).
+- ~~Re-run the browser verification battery against HEAD.~~ Done 2026-07-19 (see the "real-browser verification pass" build signoff entry): a real headless-Chromium session against HEAD's `index.html` covered scrubber keyboard/mouse/touch control, the to-do flow, light/dark themes, reduced motion, zero horizontal overflow and console errors at 320/375/1280px, and zero non-`file://` requests. **Still open:** that pass could only reach the local file — this session's network egress policy blocked every attempt to open the actual live GitHub Pages URL (403 on CONNECT), so live-vs-HEAD parity remains unconfirmed since the 2026-07-16 check. Re-run against the live URL from an environment whose network policy allows it.
+- Real-device touch and mobile pass: scrubber drag, era-label taps, to-do flow on an actual phone. Still open — Playwright touch/mobile emulation stood in for a real device in this pass (era-label taps and keyboard control confirmed reliable; native range-thumb drag did not register under emulation and needs a real device or real headed browser to check).
+- ~~Light/dark and reduced-motion check in real browsers.~~ Done 2026-07-19 against HEAD: verified via computed styles (not just presence) that `prefers-color-scheme` swaps background/text colors and `prefers-reduced-motion: reduce` zeroes the tide-fill transition.
+- Beginner reader test: still no real human novice has read the page. As a stand-in, a context-free agent cold-read the full six-era text on 2026-07-19 and reported that the pain-drives-next-era throughline held up, but surfaced two concrete polish candidates for a future content pass: (1) the "abstraction tide" line repeats identically across most eras and only reads as concrete by era six and the closing section; (2) each era's flow diagram uses a term (e.g. "DOM patch," "JSX") before the prose below it defines that term, so a linear reader meets the jargon first. Neither was corrected in this pass — verification only, no content edits made.
 
 ## Constraints (do not relax)
 
